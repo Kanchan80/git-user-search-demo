@@ -1,0 +1,56 @@
+<nav class="navbar navbar-dark bg-primary">
+    <form class="form-inline" action="">
+        <div class="form-group">
+            <div class="dropdown justify-content-start">
+                <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"
+                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Sort
+                </button>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                    <a class="dropdown-item" (click)="sortedColumn = 'nameAsc'">Username (A-Z)</a>
+                    <a class="dropdown-item" (click)="sortedColumn = 'nameDsc'">Username (Z_A)</a>
+                    <a class="dropdown-item" (click)="sortedColumn = 'idAsc'">ID <img src="assets/icons8-up-20.png"></a>
+                    <a class="dropdown-item" (click)="sortedColumn = 'idDsc'">ID <img src="assets/icons8-down-arrow-20.png"></a>
+                </div>
+            </div>
+            <div class="pl-5">
+                <input class="form-control mr-sm-2" type="search" placeholder="Search by username"
+                    [(ngModel)]="username" name="username" (keyup)="findProfile()">
+            </div>
+        </div>
+    </form>
+</nav>
+
+<div *ngIf="profiles" class="panel-body">
+    <div class="row col-lg-12 mt-3">
+        <div class="col-lg-12">
+            <b>Total Resutls: {{profiles.total_count}} </b>
+        </div>
+    </div>
+    <div *ngFor="let profile of profiles.items | sort : sortedColumn" class="border-bottom">
+        <div class="row mt-4">
+            <div class="col-lg-2">
+                <img src="{{profile.avatar_url}}" class="rounded-circle img-fluid img-thumbnail" style="width:100px;
+                height:100px">
+            </div>
+            <div class="col-lg-8">
+                <dl class="dl-horizontal row">
+                    <dt class="col-lg-2">Username</dt>
+                    <dd class="col-lg-10">{{profile.login}}</dd>
+                    <dt class="col-lg-2">URL</dt>
+                    <dd class="col-lg-10">{{profile.url}}</dd>
+                    <dt class="col-lg-2">ID</dt>
+                    <dd class="col-lg-10">{{profile.id}}</dd>
+                </dl>
+            </div>
+            <div class="col-lg-2">
+                <button (click)="getUserDetails(profile.url)" [attr.id]="profile.id" class="'btn btn-primary mt-4"
+                    type="button" data-toggle="collapse" [attr.data-target]="'#collapseExample' + profile.id"
+                    aria-expanded="false" [attr.aria-controls]="'collapseExample' + profile.id">Details</button>
+            </div>
+        </div>
+        <div class="collapse" [attr.id]="'collapseExample' + profile.id">
+            <app-profile-details></app-profile-details>
+        </div>
+    </div>
+</div>
